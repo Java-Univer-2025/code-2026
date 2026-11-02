@@ -3,12 +3,7 @@ package genericrepo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collection;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Stores elements of any type, keyed by an identity string.
@@ -36,6 +31,16 @@ public class GenericRepository<T> {
     public GenericRepository(Class<T> type, IdentityExtractor<T> extractor) {
         this.type = Objects.requireNonNull(type, "Тип не може бути null");
         this.extractor = Objects.requireNonNull(extractor, "IdentityExtractor не може бути null");
+    }
+
+
+    // For STREAM lecture
+    // All elements sorted by the given comparator; the result is unmodifiable.
+    public List<T> findAllSorted(Comparator<? super T> comparator) {
+        Objects.requireNonNull(comparator, "Comparator can't be null");
+        return items.values().stream()
+                .sorted(comparator)
+                .toList();
     }
 
     /** Adds an element; throws DuplicateIdentityException if its identity is already present. */
